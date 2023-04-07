@@ -11,7 +11,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.remote.webelement import WebElement
 
 
-def getRandomTime(None) -> int:
+def getRandomTime() -> int:
     randTime = randint(3, 5)
     return randTime
 
@@ -56,7 +56,7 @@ def login(bot_name: str, bot_pass: str) -> None:
 # def logout():
 
 
-def get_number_of_posts(None) -> int:
+def get_number_of_posts() -> int:
     """
     Returns number of post for an account or tag
     """
@@ -70,7 +70,7 @@ def get_number_of_posts(None) -> int:
         return None
 
 
-def click_first_post(None) -> bool:
+def click_first_post() -> bool:
     """
     Clicks on the first post found for an account
     """
@@ -105,7 +105,7 @@ def open_target(browser: object, targetName: str) -> bool:
     return True
 
 
-def like(None) -> None:
+def like() -> None:
     """
     Likes a post if not liked already
     """
