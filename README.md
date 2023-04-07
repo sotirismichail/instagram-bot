@@ -27,4 +27,14 @@ Should the target profile not be public, the bot will stop at the private profil
 
 The action targets for the bot are set with classes, tags and XPATH parameters. The bot locates the necessary buttons to perform the login process using the supplied user credentials, passes the cookie prompt, and after that, using the target profile parameter, the web driver follows the profile URL to perform the number of "likes" the user wants.
 
- 
+### Design Approach
+
+The target of the task was to create a bot that can independently, without any user input, perform "likes" on a target profile. Hence, a web driver framework, specifically Selenium, was utilised. By locating elements through their web classes or XPATH, the web driver interacts with the web page, passing any necessary checks or confirmation dialogues, to achieve the target goal of "liking" a target profile's specified number of posts.
+
+### Limitations
+
+The bot currently cannot create an account automatically to perform the actions on the target profile. That can be implemented in a future version of the tool. Another limitation is the fact the bot is implemented for one target platform, Firefox/Gecko, due to safety considerations regarding the Chromium web browser platform.
+
+### Results
+
+When the bot runs, it performs the actions it is designed to perform on the target profile consistently.
