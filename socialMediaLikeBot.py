@@ -15,11 +15,12 @@ def getRandomTime():
         return randTime
 
 def loggin(bot_name,bot_pass):
-    time.sleep(getRandomTime())
-    browser.find_element(By.NAME,"username").send_keys(bot_name)
-    browser.find_element(By.NAME,"password").send_keys(bot_pass)
+
+    wait.until(EC.presence_of_element_located((By.NAME,"username"))).send_keys(bot_name)
+    wait.until(EC.presence_of_element_located((By.NAME,"password"))).send_keys(bot_pass)
 	# Click on the facebook log-in button
-    wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button"))).click();
+    button = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button")))
+    browser.execute_script("arguments[0].click();", button)
 	# Save your login info : no
     wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div/div/div[1]/div/div/div/div[1]/div[1]/div[2]/section/main/div/div/div/div/div"))).click()
 	# Turn off notifications
@@ -49,11 +50,11 @@ def click_first_post():
         except:
             return False
 
-def open_target(browser):
+def open_target(browser,targetName):
         """
         Opens the target account or hashtag
         """
-        target="https://www.instagram.com/"+sys.argv[1]
+        target="https://www.instagram.com/"+targetName
         try:
             browser.get(target)
             # if unable to load the page
@@ -92,26 +93,28 @@ def next_post(browser):
         Moves to the next post
         """
         try:
-            browser.find_element(By.TAG_NAME, 'body').send_keys(Keys.RIGHT)
+            wait.until(EC.presence_of_element_located((By.TAG_NAME,"body"))).send_keys(Keys.RIGHT)
             return True
         except:
             return False
 
 
 
-
+## Starting the Bot
 
 
 browser = webdriver.Firefox(executable_path="./drivers/geckodriver")
 # ======= Setting =============
 # Your Facebook credentials
-bot_username = "iordanispapavlou"
-bot_password = "IpaP123"
+bot_username = sys.argv[1] #"iordanispapavlou"
+bot_password = sys.argv[2] #"IpaP123"
+targetName = sys.argv[3]
+numberOfPosts = int(sys.argv[4])
 
 # =============================
 # Open the Website
 browser.get('https://www.instagram.com/')
-wait = WebDriverWait(browser, timeout=40)
+wait = WebDriverWait(browser, timeout=50)
 wait.until(EC.presence_of_element_located((By.XPATH, "//button[text()='Only allow essential cookies']"))).click()
 
 # loggin in instagram
@@ -120,10 +123,18 @@ loggin(bot_username,bot_password);
 
 
 # Make a like
-open_target(browser)
-click_first_post()
-like()
-time.sleep(getRandomTime())
-next_post(browser)
-like()
+open_target(browser,targetName)
+maxPosts = get_number_of_posts()
+
+if maxPosts < numberOfPosts :
+    numberOfPosts = maxPosts
+
+if numberOfPosts != 0 :
+    click_first_post()
+    like()
+
+    for x in range(numberOfPosts-1):
+        next_post(browser)
+        like()
+    
 
